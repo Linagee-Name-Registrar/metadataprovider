@@ -1,0 +1,7 @@
+node_modules/
+data/*
+.evn
+.idea
+/package-lock.json
+/error.log
+/.env

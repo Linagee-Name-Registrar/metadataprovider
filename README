@@ -1,0 +1,6 @@
+# create .env file
+
+SERVER_NAME=
+INFURA_KEY=
+OPENSEA_KEY=
+IGNORE_CACHE=false
