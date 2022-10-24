@@ -170,15 +170,16 @@ app.get('/:id', async function (req, res) {
                     var validUtf8 = true;
 
 
-                    var namefortoken = "";
+                    var namefortoken = " ";
 
                     try{
 
-                        var namefortoken = ethers.utils.parseBytes32String(result);
+                        namefortoken = ethers.utils.parseBytes32String(result);
                     }
                     catch(e){
 
-                        var validUtf8 = false;
+                        console.log("ERR 1")
+                        validUtf8 = false;
                         console.log(e);
                     }
 
