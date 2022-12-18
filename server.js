@@ -75,13 +75,13 @@ app.get('/image/:id',function(req,res){
         res.setHeader('Content-Type', 'image/svg+xml');
 
         let warninghint = "";
-        let color1 = "#00bfc7;"
-        let color2 = "#9c57c9;"
+        let color1 = "#bd8eff;"
+        let color2 = "#69e0ff;"
 
         if(warning == "Yes"){
             color1= "#ff6062"
             color2= "#ff9766"
-            warninghint = '<text style="fill: rgb(255, 255, 255); font-family: Arial, sans-serif; font-size: 80px; white-space: pre;text-align:center;width:100%" text-anchor="middle" x="50%" y="30%">⚠</text>';
+            warninghint = '<text style="fill: rgb(255, 255, 255); font-family: Roboto; font-size: 80px; white-space: pre;text-align:center;width:100%" text-anchor="middle" x="50%" y="30%">⚠</text>';
         }
 
 
@@ -96,7 +96,8 @@ app.get('/image/:id',function(req,res){
         let svg = '<?xml version="1.0" encoding="utf-8"?>\n' +
             '<svg viewBox="0 0 500 500" width="500" height="500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">\n' +
             '  <defs>\n' +
-            '    <linearGradient id="gradient-3-0" gradientUnits="userSpaceOnUse" x1="252.494" y1="-2.772" x2="252.494" y2="505.543" gradientTransform="matrix(1, 0, 0, 1, 0, 0)" xlink:href="#gradient-3"/>\n' +
+            '    <style type="text/css">@import url("https://fonts.googleapis.com/css?family=Lato|Open+Sans|Oswald|Raleway|Roboto|Indie+Flower|Gamja+Flower");</style>\n' + 
+            '    <linearGradient id="gradient-3-0" gradientUnits="userSpaceOnUse" x1="252.494" y1="-200.772" x2="252.494" y2="505.543" gradientTransform="matrix(1, 0, 0, 1, 0, 0)" xlink:href="#gradient-3"/>\n' +
             '    <linearGradient id="gradient-3" bx:pinned="true">\n' +
             '      <stop offset="0.35" style="stop-color: '+color1+' "/>\n' +
             '      <stop offset="1" style="stop-color:'+color2+' "/>\n' +
@@ -104,8 +105,9 @@ app.get('/image/:id',function(req,res){
             '    <linearGradient id="gradient-3-1" gradientUnits="userSpaceOnUse" x1="252.494" y1="-2.772" x2="252.494" y2="505.543" xlink:href="#gradient-3"/>\n' +
             '  </defs>\n' +
             '  <rect x="-1.109" y="-2.772" width="507.206" height="508.315" style="fill: url(#gradient-3-0); stroke: url(#gradient-3-1);"/>\n' +
+            '   <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="enable-background:new -25 -30 89 94" width="84" height="84" viewBox="-25 -30 89 94"><path d="M27.279 51.644a.36.36 0 0 0 .01.378c.114.198.28.198.343.198l6.57.001 24.282-42.058a6.615 6.615 0 0 0 .305-6.102c-1.108-2.433-3.597-3.94-6.271-3.94h-22.12v.007c-1.642.068-3.035 1.347-3.108 3a3.148 3.148 0 0 0 3.108 3.29v.002h2.494L5.515 53.838c-1.249 2.163-1.209 4.759.12 6.895 1.237 1.989 3.461 3.148 5.804 3.148h37.524c1.617 0 3.035-1.184 3.212-2.791a3.15 3.15 0 0 0-3.13-3.508H11.313c-.063 0-.229 0-.343-.198-.114-.198-.031-.342 0-.396L40.146 6.419h12.541c.063 0 .229 0 .343.198.114.198.031.342 0 .396L27.279 51.644z" style="fill:#fff"/></svg>\n' +
             warninghint +
-            '  <text style="fill: rgb(255, 255, 255); font-family: Arial, sans-serif; font-size: '+fsize+'px; letter-spacing:3px;white-space: pre;text-align:center;width:100%" text-anchor="middle" x="50%" y="55%">'+escapeHtml(domainname)+'</text>\n' +
+            '  <text style="fill: rgb(255, 255, 255); font-family: Roboto; font-size: '+fsize+'px; letter-spacing:3px;white-space: pre;text-align:center;width:100%" text-anchor="middle" x="50%" y="80%">'+escapeHtml(domainname)+'</text>\n' +
             '</svg>'
 
         res.send(svg)
