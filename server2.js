@@ -22,62 +22,32 @@ const require = createRequire(import.meta.url);
 import dotenv from "dotenv";
 dotenv.config();
 
-
-// require('dotenv').config();
-// var express = require('express');
-// var app = express();
-// app.use(express.static('public'));
-// var fs = require('fs');
 const emojiRegex = require('emoji-regex')();
-// const ethers = require("ethers")
 
-// const Web3 = require('web3');
 var app = express();
 app.use(express.static('public'));
 
-//const web3 = new Web3("https://mainnet.infura.io/v3/"+process.env.INFURA_KEY);
-//const provider = new ethers.providers.JsonRpcProvider("https://mainnet.infura.io/v3/"+process.env.INFURA_KEY);
 const provider = new ethers.providers.InfuraProvider(
     "homestead",
     process.env.INFURA_KEY
 );
 
-
-//const { checkEmoji } = require('./emoji.cjs');
-import { checkEmoji } from './emoji.mjs'
-
-
-// let abi = require("./abi.json");
-// const history = require("./history.json");
-
-
 const smartcontractaddress = "0x2cc8342d7c8bff5a213eb2cde39de9a59b3461a7";
-//const contract = new web3.eth.Contract(abi, smartcontractaddress);
 const contract = new ethers.Contract(smartcontractaddress, abi, provider);
 
 app.get('/favicon.ico', function (req, res) {
-
     res.send('Welcome Home');
 });
 
 
 app.get('/image/:id',function(req,res){
-
-
     const tokenId = req.params.id
 
-
-
     try{
-
-
         const parsedata = JSON.parse(fs.readFileSync("data/"+tokenId+".json"))
 
         const domainname = parsedata.name;
         const warning = parsedata.attributes[0].value;
-
-
-
 
         res.setHeader('Content-Type', 'image/svg+xml');
 
@@ -142,11 +112,11 @@ app.get('/image/:id',function(req,res){
             '      <stop offset="1" style="stop-color:'+color2+' "/>\n' +
             '    </linearGradient>\n' +
             '    <linearGradient id="gradient-3-1" gradientUnits="userSpaceOnUse" x1="252.494" y1="-2.772" x2="252.494" y2="505.543" xlink:href="#gradient-3"/>\n' +
+            '    <filter id="eIBWfmCTQZn2-filter" x="-150%" width="400%" y="-150%" height="400%"><feGaussianBlur id="eIBWfmCTQZn2-filter-drop-shadow-0-blur" in="SourceAlpha" stdDeviation="10,10"/><feOffset id="eIBWfmCTQZn2-filter-drop-shadow-0-offset" dx="0" dy="0" result="tmp"/><feFlood id="eIBWfmCTQZn2-filter-drop-shadow-0-flood" flood-color="#fff"/><feComposite id="eIBWfmCTQZn2-filter-drop-shadow-0-composite" operator="in" in2="tmp"/><feMerge id="eIBWfmCTQZn2-filter-drop-shadow-0-merge"><feMergeNode id="eIBWfmCTQZn2-filter-drop-shadow-0-merge-node-1"/><feMergeNode id="eIBWfmCTQZn2-filter-drop-shadow-0-merge-node-2" in="SourceGraphic"/></feMerge></filter>\n' +
             '  </defs>\n' +
             '  <rect x="-1.109" y="-2.772" width="507.206" height="508.315" style="fill: url(#gradient-3-0); stroke: url(#gradient-3-1);"/>\n' +
             '   <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="enable-background:new -25 -30 89 94" width="84" height="84" viewBox="-25 -30 89 94"><path d="M27.279 51.644a.36.36 0 0 0 .01.378c.114.198.28.198.343.198l6.57.001 24.282-42.058a6.615 6.615 0 0 0 .305-6.102c-1.108-2.433-3.597-3.94-6.271-3.94h-22.12v.007c-1.642.068-3.035 1.347-3.108 3a3.148 3.148 0 0 0 3.108 3.29v.002h2.494L5.515 53.838c-1.249 2.163-1.209 4.759.12 6.895 1.237 1.989 3.461 3.148 5.804 3.148h37.524c1.617 0 3.035-1.184 3.212-2.791a3.15 3.15 0 0 0-3.13-3.508H11.313c-.063 0-.229 0-.343-.198-.114-.198-.031-.342 0-.396L40.146 6.419h12.541c.063 0 .229 0 .343.198.114.198.031.342 0 .396L27.279 51.644z" style="fill:#fff"/></svg>\n' +
-            '  <text style="fill: rgb(255, 255, 255); font-family: Roboto; font-size: '+fsize+'px; letter-spacing:3px;white-space: pre;text-align:center;width:100%" text-anchor="middle" x="50%" y="80%"><p>'+escapeHtml(domainname)+'</p>\n'+
-            '  <p style="fill: rgb(255, 255, 255); font-weight: bold; text-shadow: #FF0000 0 30px;">'+escapeHtml(".og")+'</p></text>\n' +
+            '  <text style="fill: rgb(255, 255, 255); font-family: Roboto; font-size: '+fsize+'px; letter-spacing:3px;white-space: pre;text-align:center;width:100%" text-anchor="middle" x="50%" y="80%"><tspan>'+escapeHtml(domainname)+'</tspan><tspan font-weight="700"  filter="url(#eIBWfmCTQZn2-filter)">.og</tspan></text>\n'+
             '</svg>'
         }
 
@@ -164,7 +134,7 @@ let SERVERNAME = process.env.SERVER_NAME
 let ignoreCache = process.env.IGNORE_CACHE;
 
 if(process.env.IGNORE_CACHE == "false"){
-    ignoreCache = false
+    ignoreCache = true
 }
 else{
     ignoreCache = true
@@ -181,8 +151,6 @@ app.get('/:id', async function (req, res) {
     try{
 
         if (fs.existsSync("data/"+tokenId+".json") && !ignoreCache) {
-
-
 
             console.log("From Cache:"+tokenId)
 
