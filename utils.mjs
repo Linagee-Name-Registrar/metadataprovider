@@ -1,4 +1,4 @@
-import {ens_normalize} from '@adraffy/ens-normalize';
+import {ens_normalize, ens_tokenize} from '@adraffy/ens-normalize';
 import ethers from 'ethers';
 import {Blob} from 'buffer';
 
@@ -75,3 +75,22 @@ export function isNormalizedBytes(_bytes) {
       }
       return(false)
     }
+
+export function onlyEmoji(_name) {
+  var tokens = ens_tokenize(_name);
+  if(tokens){
+    console.log("tokens array", tokens)
+    var checkExists = tokens.every(el => el.type === "emoji");
+    console.log("check exists", checkExists)
+    if(checkExists){
+      return(true)
+    }
+    else{
+      return(false)
+    }
+  }
+  else{
+    return(false)
+  }
+  
+}

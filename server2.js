@@ -9,7 +9,7 @@ import Web3 from 'web3';
 
 
 //---------NEW LNR NORMALIZE------------
-import { bytes32ToString, isNormalizedBytes } from './utils.mjs'
+import { bytes32ToString, isNormalizedBytes, onlyEmoji } from './utils.mjs'
 
 
 
@@ -61,7 +61,7 @@ app.get('/image/:id',function(req,res){
         var color1 = "#bd8eff;"
         var color2 = "#69e0ff;"
 
-        if(warning == "Invalid"){
+        if(warning == "Invalid" || warning == "Not Normalized"){
             var color1= "#ff6062"
             var color2= "#ff9766"
             var warninghint = '<text style="fill: rgb(255, 255, 255); font-family: Roboto; font-size: 80px; white-space: pre;text-align:center;width:100%" text-anchor="middle" x="50%" y="30%">⚠</text>';
@@ -84,23 +84,23 @@ app.get('/image/:id',function(req,res){
             '</svg>'
 
         }
-        if(warning == "Not Normalized"){
-            var svg = '<?xml version="1.0" encoding="utf-8"?>\n' +
-            '<svg viewBox="0 0 500 500" width="500" height="500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">\n' +
-            '  <defs>\n' +
-            '    <style type="text/css">@import url("https://fonts.googleapis.com/css?family=Lato|Open+Sans|Oswald|Raleway|Roboto|Indie+Flower|Gamja+Flower");</style>\n' + 
-            '    <linearGradient id="gradient-3-0" gradientUnits="userSpaceOnUse" x1="252.494" y1="-200.772" x2="252.494" y2="505.543" gradientTransform="matrix(1, 0, 0, 1, 0, 0)" xlink:href="#gradient-3"/>\n' +
-            '    <linearGradient id="gradient-3" bx:pinned="true">\n' +
-            '      <stop offset="0.35" style="stop-color: '+color1+' "/>\n' +
-            '      <stop offset="1" style="stop-color:'+color2+' "/>\n' +
-            '    </linearGradient>\n' +
-            '    <linearGradient id="gradient-3-1" gradientUnits="userSpaceOnUse" x1="252.494" y1="-2.772" x2="252.494" y2="505.543" xlink:href="#gradient-3"/>\n' +
-            '  </defs>\n' +
-            '  <rect x="-1.109" y="-2.772" width="507.206" height="508.315" style="fill: url(#gradient-3-0); stroke: url(#gradient-3-1);"/>\n' +
-            '   <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="enable-background:new -25 -30 89 94" width="84" height="84" viewBox="-25 -30 89 94"><path d="M27.279 51.644a.36.36 0 0 0 .01.378c.114.198.28.198.343.198l6.57.001 24.282-42.058a6.615 6.615 0 0 0 .305-6.102c-1.108-2.433-3.597-3.94-6.271-3.94h-22.12v.007c-1.642.068-3.035 1.347-3.108 3a3.148 3.148 0 0 0 3.108 3.29v.002h2.494L5.515 53.838c-1.249 2.163-1.209 4.759.12 6.895 1.237 1.989 3.461 3.148 5.804 3.148h37.524c1.617 0 3.035-1.184 3.212-2.791a3.15 3.15 0 0 0-3.13-3.508H11.313c-.063 0-.229 0-.343-.198-.114-.198-.031-.342 0-.396L40.146 6.419h12.541c.063 0 .229 0 .343.198.114.198.031.342 0 .396L27.279 51.644z" style="fill:#fff"/></svg>\n' +
-            '  <text style="fill: rgb(255, 255, 255); font-family: Roboto; font-size: '+fsize+'px; letter-spacing:3px;white-space: pre;text-align:center;width:100%" text-anchor="middle" x="50%" y="80%">'+escapeHtml(domainname)+'</text>\n' +
-            '</svg>'
-        }
+        // if(warning == "Not Normalized"){
+        //     var svg = '<?xml version="1.0" encoding="utf-8"?>\n' +
+        //     '<svg viewBox="0 0 500 500" width="500" height="500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">\n' +
+        //     '  <defs>\n' +
+        //     '    <style type="text/css">@import url("https://fonts.googleapis.com/css?family=Lato|Open+Sans|Oswald|Raleway|Roboto|Indie+Flower|Gamja+Flower");</style>\n' + 
+        //     '    <linearGradient id="gradient-3-0" gradientUnits="userSpaceOnUse" x1="252.494" y1="-200.772" x2="252.494" y2="505.543" gradientTransform="matrix(1, 0, 0, 1, 0, 0)" xlink:href="#gradient-3"/>\n' +
+        //     '    <linearGradient id="gradient-3" bx:pinned="true">\n' +
+        //     '      <stop offset="0.35" style="stop-color: '+color1+' "/>\n' +
+        //     '      <stop offset="1" style="stop-color:'+color2+' "/>\n' +
+        //     '    </linearGradient>\n' +
+        //     '    <linearGradient id="gradient-3-1" gradientUnits="userSpaceOnUse" x1="252.494" y1="-2.772" x2="252.494" y2="505.543" xlink:href="#gradient-3"/>\n' +
+        //     '  </defs>\n' +
+        //     '  <rect x="-1.109" y="-2.772" width="507.206" height="508.315" style="fill: url(#gradient-3-0); stroke: url(#gradient-3-1);"/>\n' +
+        //     '   <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="enable-background:new -25 -30 89 94" width="84" height="84" viewBox="-25 -30 89 94"><path d="M27.279 51.644a.36.36 0 0 0 .01.378c.114.198.28.198.343.198l6.57.001 24.282-42.058a6.615 6.615 0 0 0 .305-6.102c-1.108-2.433-3.597-3.94-6.271-3.94h-22.12v.007c-1.642.068-3.035 1.347-3.108 3a3.148 3.148 0 0 0 3.108 3.29v.002h2.494L5.515 53.838c-1.249 2.163-1.209 4.759.12 6.895 1.237 1.989 3.461 3.148 5.804 3.148h37.524c1.617 0 3.035-1.184 3.212-2.791a3.15 3.15 0 0 0-3.13-3.508H11.313c-.063 0-.229 0-.343-.198-.114-.198-.031-.342 0-.396L40.146 6.419h12.541c.063 0 .229 0 .343.198.114.198.031.342 0 .396L27.279 51.644z" style="fill:#fff"/></svg>\n' +
+        //     '  <text style="fill: rgb(255, 255, 255); font-family: Roboto; font-size: '+fsize+'px; letter-spacing:3px;white-space: pre;text-align:center;width:100%" text-anchor="middle" x="50%" y="80%">'+escapeHtml(domainname)+'</text>\n' +
+        //     '</svg>'
+        // }
         if(warning == "Normalized"){
             var svg = '<?xml version="1.0" encoding="utf-8"?>\n' +
             '<svg viewBox="0 0 500 500" width="500" height="500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">\n' +
@@ -200,130 +200,95 @@ app.get('/:id', async function (req, res) {
 
                     if(nameString && nameString.length >0){
 
-                        console.log("in name if", isValid, isNormalized)
-
-                        let specialchar = "No";
-                        if (!onlyLatinCharacters(nameString)) {
-                            specialchar = "Yes";
-                        }
-
-
-                        let digits1char = "No"
-                        if(digits1(nameString) && specialchar == "No"){
-                            digits1char = "Yes"
-                        }
-
-                        let digits2char = "No"
-                        if(digits2(nameString) && specialchar == "No"){
-                            digits2char = "Yes"
-                        }
-
-                        let digits3char = "No"
-                        if(digits3(nameString) && specialchar == "No"){
-                            digits3char = "Yes"
-                        }
-
-                        let digits4char = "No"
-                        if(digits4(nameString) && specialchar == "No"){
-                            digits4char = "Yes"
-                        }
-
-                        let digits5char = "No"
-                        if(digits5(nameString) && specialchar == "No"){
-                            digits5char = "Yes"
-                        }
-
-                        let lowerletters1char = "No"
-                        if(lowerletters1(nameString) && specialchar == "No"){
-                            lowerletters1char = "Yes"
-                        }
-
-                        let upperletters1char = "No"
-                        if(upperletters1(nameString) && specialchar == "No"){
-                            upperletters1char = "Yes"
-                        }
-
-                        let lowerletters2char = "No"
-                        if(lowerletters2(nameString) && specialchar == "No"){
-                            lowerletters2char = "Yes"
-                        }
-
-                        let upperletters2char = "No"
-                        if(upperletters2(nameString) && specialchar == "No"){
-                            upperletters2char = "Yes"
-                        }
-
-                        let lowerletters3char = "No"
-                        if(lowerletters3(nameString) && specialchar == "No"){
-                            lowerletters3char = "Yes"
-                        }
-
-                        let upperletters3char = "No"
-                        if(upperletters3(nameString) && specialchar == "No"){
-                            upperletters3char = "Yes"
-                        }
-
-                        let lowerletters4char = "No"
-                        if(lowerletters4(nameString) && specialchar == "No"){
-                            lowerletters4char = "Yes"
-                        }
-
-                        let upperletters4char = "No"
-                        if(upperletters4(nameString) && specialchar == "No"){
-                            upperletters4char = "Yes"
-                        }
-
-                        let arabicdigits1char = "No"
-                        if(arabicdigits1(nameString) && realchar == true){
-                            arabicdigits1char = "Yes"
-                        }
-
-
-                        let arabicdigits2char = "No"
-                        if(arabicdigits2(nameString) && realchar == true){
-                            arabicdigits2char = "Yes"
-                        }
-
-                        let arabicdigits3char = "No"
-                        if(arabicdigits3(nameString) && realchar == true){
-                            arabicdigits3char = "Yes"
-                        }
-
-                        console.log("here")
-
-                        let emojistr = "No"
-                        if(hasOnlyEmoji(nameString) && realchar == true){
-                            emojistr = "Yes"
-                            specialchar = "No"
-                        }
-
-
                         let historic = "No"
-                        if(isHistoric(nameString) && specialchar == "No"){
+                        if(isHistoric(nameString)){
                             historic = isHistoric(nameString)
                         }
 
                         var retJson
-
-
-
-
                         if(isValid && isNormalized){
+                                
 
-                            console.log("botrh")
+                            let digits1char = "No"
+                            if(digits1(nameString)){
+                                digits1char = "Yes"
+                            }
 
+                            let digits2char = "No"
+                            if(digits2(nameString)){
+                                digits2char = "Yes"
+                            }
+
+                            let digits3char = "No"
+                            if(digits3(nameString)){
+                                digits3char = "Yes"
+                            }
+
+                            let digits4char = "No"
+                            if(digits4(nameString)){
+                                digits4char = "Yes"
+                            }
+
+                            let digits5char = "No"
+                            if(digits5(nameString)){
+                                digits5char = "Yes"
+                            }
+
+                            let lowerletters1char = "No"
+                            if(lowerletters1(nameString)){
+                                lowerletters1char = "Yes"
+                            }
+
+                            let lowerletters2char = "No"
+                            if(lowerletters2(nameString)){
+                                lowerletters2char = "Yes"
+                            }
+
+                            let lowerletters3char = "No"
+                            if(lowerletters3(nameString)){
+                                lowerletters3char = "Yes"
+                            }
+
+                            let lowerletters4char = "No"
+                            if(lowerletters4(nameString)){
+                                lowerletters4char = "Yes"
+                            }
+
+
+                            let arabicdigits1char = "No"
+                            if(arabicdigits1(nameString) && realchar == true){
+                                arabicdigits1char = "Yes"
+                            }
+
+
+                            let arabicdigits2char = "No"
+                            if(arabicdigits2(nameString) && realchar == true){
+                                arabicdigits2char = "Yes"
+                            }
+
+                            let arabicdigits3char = "No"
+                            if(arabicdigits3(nameString) && realchar == true){
+                                arabicdigits3char = "Yes"
+                            }
+
+                            console.log("here")
+
+                            let emojistr = "No"
+                            if(onlyEmoji(nameString)){
+                                emojistr = "Yes"
+                            }
 
                             var retJson = {
                                 "description": "From the first NFT contract on Ethereum, launched August 8, 2015. Bytecode: "+result,
                                 "image": SERVERNAME + "/image/" + tokenId,
                                 "name": nameString,
-                                "external_url": "https://linageenameregistrar.com/",
+                                "external_url": "https://linagee.vision/",
 
-                                "attributes": [{"trait_type": "Format", "value": "Normalized"},{"trait_type": "Special chars", "value": specialchar},{"trait_type": "Length", "value": nameString.length},{"trait_type": "1 Digit", "value": digits1char},{"trait_type": "2 Digits", "value": digits2char},{"trait_type": "3 Digits", "value": digits3char},{"trait_type": "4 Digits", "value": digits4char},{"trait_type": "5 Digits", "value": digits5char},
-                                    {"trait_type": "1 Letter (lowercase)", "value": lowerletters1char},{"trait_type": "1 Letter (uppercase)", "value": upperletters1char},
-                                    {"trait_type": "2 Letters (lowercase)", "value": lowerletters2char},{"trait_type": "2 Letters (uppercase)", "value": upperletters2char},
-                                    {"trait_type": "3 Letters (lowercase)", "value": lowerletters3char},{"trait_type": "3 Letters (uppercase)", "value": upperletters3char},
-                                    {"trait_type": "4 Letters (lowercase)", "value": lowerletters4char},{"trait_type": "4 Letters (uppercase)", "value": upperletters4char},
+                                "attributes": [{"trait_type": "Format", "value": "Normalized"},{"trait_type": "Length", "value": nameString.length},{"trait_type": "1 Digit", "value": digits1char},{"trait_type": "2 Digits", "value": digits2char},{"trait_type": "3 Digits", "value": digits3char},{"trait_type": "4 Digits", "value": digits4char},{"trait_type": "5 Digits", "value": digits5char},
+                                    {"trait_type": "1 Letter (lowercase)", "value": lowerletters1char},
+                                    {"trait_type": "2 Letters (lowercase)", "value": lowerletters2char},
+                                    {"trait_type": "3 Letters (lowercase)", "value": lowerletters3char},
+                                    {"trait_type": "4 Letters (lowercase)", "value": lowerletters4char},
                                     {"trait_type": "Arabic 1 Digit", "value": arabicdigits1char},{"trait_type": "Arabic 2 Digits", "value": arabicdigits2char},{"trait_type": "Arabic 3 Digits", "value": arabicdigits3char},
                                     {"trait_type": "Emoji only", "value": emojistr},{"trait_type": "Historic", "value": historic}]
 
@@ -333,26 +298,13 @@ app.get('/:id', async function (req, res) {
 
                         else if(isValid && !isNormalized){
 
-                            console.log("only valid")
-
                             var retJson = {
                                 "description": "From the first NFT contract on Ethereum, launched August 8, 2015. Bytecode: "+result,
                                 "image": SERVERNAME + "/image/" + tokenId,
                                 "name": nameString,
-                                "external_url": "https://linageenameregistrar.com/",
-
-                                "attributes": [{"trait_type": "Format", "value": "Not Normalized"},{"trait_type": "Special chars", "value": specialchar},{"trait_type": "Length", "value": nameString.length},{"trait_type": "1 Digit", "value": digits1char},{"trait_type": "2 Digits", "value": digits2char},{"trait_type": "3 Digits", "value": digits3char},{"trait_type": "4 Digits", "value": digits4char},{"trait_type": "5 Digits", "value": digits5char},
-                                    {"trait_type": "1 Letter (lowercase)", "value": lowerletters1char},{"trait_type": "1 Letter (uppercase)", "value": upperletters1char},
-                                    {"trait_type": "2 Letters (lowercase)", "value": lowerletters2char},{"trait_type": "2 Letters (uppercase)", "value": upperletters2char},
-                                    {"trait_type": "3 Letters (lowercase)", "value": lowerletters3char},{"trait_type": "3 Letters (uppercase)", "value": upperletters3char},
-                                    {"trait_type": "4 Letters (lowercase)", "value": lowerletters4char},{"trait_type": "4 Letters (uppercase)", "value": upperletters4char},
-                                    {"trait_type": "Arabic 1 Digit", "value": arabicdigits1char},{"trait_type": "Arabic 2 Digits", "value": arabicdigits2char},{"trait_type": "Arabic 3 Digits", "value": arabicdigits3char},
-                                    {"trait_type": "Emoji only", "value": emojistr},{"trait_type": "Historic", "value": historic}]
-
+                                "external_url": "https://linagee.vision/",
+                                "attributes": [{"trait_type": "Format", "value": "Not Normalized"},{"trait_type": "Length", "value": nameString.length},{"trait_type": "Historic", "value": historic}]
                             }
-
-
-
 
                         }
                         else{
@@ -362,8 +314,8 @@ app.get('/:id', async function (req, res) {
                                 "description": "The first NFTs on Ethereum, launched August 8, 2015.",
                                 "image": SERVERNAME + "/image/" + tokenId,
                                 "name": "INVALID",
-                                "external_url": "https://linageenameregistrar.com/",
-                                "attributes": [{"trait_type": "Format", "value": "Invalid"},{"trait_type": "Special chars", "value": specialchar}]
+                                "external_url": "https://linagee.vision/",
+                                "attributes": [{"trait_type": "Format", "value": "Invalid"}]
                             }
                         }
 
@@ -404,10 +356,6 @@ app.listen(process.env.PORT || 8080, function () {
     console.log('Listening on port 8080!');
 });
 
-function onlyLatinCharacters(str) {
-    return /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/.test(str);
-}
-
 
 function digits3(str)
 {
@@ -443,39 +391,20 @@ function lowerletters1(str)
     return /^[a-z]{1}$/.test(str);
 }
 
-function upperletters1(str)
-{
-    return /^[A-Z]{1}$/.test(str);
-}
-
 function lowerletters2(str)
 {
     return /^[a-z]{2}$/.test(str);
 }
 
-function upperletters2(str)
-{
-    return /^[A-Z]{2}$/.test(str);
-}
 
 function lowerletters3(str)
 {
     return /^[a-z]{3}$/.test(str);
 }
 
-function upperletters3(str)
-{
-    return /^[A-Z]{3}$/.test(str);
-}
-
 function lowerletters4(str)
 {
     return /^[a-z]{4}$/.test(str);
-}
-
-function upperletters4(str)
-{
-    return /^[A-Z]{4}$/.test(str);
 }
 
 //-----DIDNT GET TO TEST ARABIC DIGITS-------------------
