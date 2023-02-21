@@ -78,10 +78,8 @@ export function isNormalizedBytes(_bytes) {
 
 export function onlyEmoji(_name) {
   var tokens = ens_tokenize(_name);
-  if(tokens){
-    console.log("tokens array", tokens)
+  if(tokens && tokens.length > 0){
     var checkExists = tokens.every(el => el.type === "emoji");
-    console.log("check exists", checkExists)
     if(checkExists){
       return(true)
     }
@@ -91,6 +89,5 @@ export function onlyEmoji(_name) {
   }
   else{
     return(false)
-  }
-  
+  } 
 }
