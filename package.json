@@ -2,7 +2,7 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "start": "node server2.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "@adraffy/ens-normalize": "1.8.8",

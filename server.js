@@ -256,18 +256,18 @@ app.get('/:id', async function (req, res) {
 
 
                             let arabicdigits1char = "No"
-                            if(arabicdigits1(nameString) && realchar == true){
+                            if(arabicdigits1(nameString)){
                                 arabicdigits1char = "Yes"
                             }
 
 
                             let arabicdigits2char = "No"
-                            if(arabicdigits2(nameString) && realchar == true){
+                            if(arabicdigits2(nameString)){
                                 arabicdigits2char = "Yes"
                             }
 
                             let arabicdigits3char = "No"
-                            if(arabicdigits3(nameString) && realchar == true){
+                            if(arabicdigits3(nameString)){
                                 arabicdigits3char = "Yes"
                             }
 
@@ -328,7 +328,10 @@ app.get('/:id', async function (req, res) {
                     }
                     else{
 
+                     
+
                         fs.appendFileSync("error.log","tokenId\n");
+              
 
                     }
 

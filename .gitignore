@@ -1,6 +1,5 @@
 node_modules/
-data/*
-.evn
+.env
 .idea
 /package-lock.json
 /error.log
