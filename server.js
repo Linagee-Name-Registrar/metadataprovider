@@ -283,7 +283,6 @@ app.get('/:id', async function (req, res) {
                                 "image": SERVERNAME + "/image/" + tokenId,
                                 "name": nameString,
                                 "external_url": "https://linagee.vision/",
-
                                 "attributes": [{"trait_type": "Format", "value": "Normalized"},{"trait_type": "Length", "value": nameString.length},{"trait_type": "1 Digit", "value": digits1char},{"trait_type": "2 Digits", "value": digits2char},{"trait_type": "3 Digits", "value": digits3char},{"trait_type": "4 Digits", "value": digits4char},{"trait_type": "5 Digits", "value": digits5char},
                                     {"trait_type": "1 Letter (lowercase)", "value": lowerletters1char},
                                     {"trait_type": "2 Letters (lowercase)", "value": lowerletters2char},

@@ -1,5 +1,6 @@
 import ethers from 'ethers';
 import Web3 from 'web3'
+import fs from 'fs';
 
 const test = "0x000000000000000000000000000000000000000000000000000000000f09fa5b"
 
@@ -45,10 +46,112 @@ function web3StringToBytes32(text) {
 }
 
 
-console.log(namefortoken)
-console.log(namefortoken.length)
+// console.log(namefortoken)
+// console.log(namefortoken.length)
 
 
-console.log(web3StringToBytes32(namefortoken))
-console.log(test3 == web3StringToBytes32(namefortoken))
+// console.log(web3StringToBytes32(namefortoken))
+// console.log(test3 == web3StringToBytes32(namefortoken))
 
+
+
+function downloadObjectAsJson(exportObj, exportName){
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
+    var downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href",     dataStr);
+    downloadAnchorNode.setAttribute("download", exportName + ".json");
+    document.body.appendChild(downloadAnchorNode); // required for firefox
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  }
+
+async function runTest(){
+
+    const dataList = []
+
+    for(let i=1; i<10; i++){
+        console.log(i)
+        try{
+            let tokenBytes = await og.lnr.wrapperContract.idToName(i);
+            if(tokenBytes){
+                var isValid = false
+                
+                try{
+                    var isValid = og.lnr.isNormalizedBytes(tokenBytes)
+                }
+                catch(e){
+
+                }
+                dataList.push({tokenId: i, bytes: tokenBytes, isValid: isValid})
+            }
+        }
+        catch(e){
+            dataList.push({tokenId: i, bytes: "error", isValid: "errorValid"})
+            console.log(e);
+        }
+
+    }
+    downloadObjectAsJson(dataList, "report_3_18_23")
+
+}
+
+//await runTest()
+
+
+
+function testTokens(){
+
+    const report = []
+
+    const newData = JSON.parse(fs.readFileSync("tokens_3_18_23.json"))
+    for(let i=1; i<69534; i++){
+    console.log(i)
+
+    const newBytes = newData[i]['bytes']
+    const newId = newData[i]['tokenId']
+    const newStatus = newData[i]['isValid']
+
+    if (fs.existsSync("data/"+newId+".json")){
+        const earlyData = JSON.parse(fs.readFileSync("data/"+newId+".json"))
+        const earlyBytes = (earlyData.description).slice((earlyData.description).lastIndexOf(' ') + 1);
+        const earlyStatus = earlyData.attributes[0].value;
+        var boolStatus = ""
+        var alert1 = "";
+        var alert2 = "";
+
+        if(earlyStatus == "Normalized"){
+            var boolStatus = true
+        }
+        if(earlyStatus == "Invalid" || earlyStatus == "Not Normalized"){
+            var boolStatus = false
+        }
+
+
+        if(earlyBytes !== newBytes){
+            var alert1 = "bytesError"
+        }
+
+        if(newStatus !== boolStatus){
+            var alert2 = " statusError"
+        }
+
+        var alert = alert1+alert2
+
+
+        if(alert.length > 1){
+            report.push({tokenId: newId, bytes: newBytes, status: newStatus, alert: alert})
+        }
+        
+
+    }
+    else{
+        report.push({tokenId: newId, bytes: newBytes, status: newStatus, alert: "missing" })
+    }
+
+    }
+
+    fs.writeFileSync("report_3_19_23.json", JSON.stringify(report));
+
+}
+
+testTokens()
