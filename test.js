@@ -104,7 +104,7 @@ function testTokens(){
     const report = []
 
     const newData = JSON.parse(fs.readFileSync("tokens_3_18_23.json"))
-    for(let i=1; i<69534; i++){
+    for(let i=0; i<newData.length; i++){
     console.log(i)
 
     const newBytes = newData[i]['bytes']
@@ -119,10 +119,10 @@ function testTokens(){
         var alert1 = "";
         var alert2 = "";
 
-        if(earlyStatus == "Normalized"){
+        if(earlyStatus == "Yes"){
             var boolStatus = true
         }
-        if(earlyStatus == "Invalid" || earlyStatus == "Not Normalized"){
+        if(earlyStatus == "Invalid" || earlyStatus == "No"){
             var boolStatus = false
         }
 
@@ -150,7 +150,7 @@ function testTokens(){
 
     }
 
-    fs.writeFileSync("report_3_19_23.json", JSON.stringify(report));
+    fs.writeFileSync("report_3_30_23p2.json", JSON.stringify(report));
 
 }
 

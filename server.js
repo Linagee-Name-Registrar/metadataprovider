@@ -61,7 +61,7 @@ app.get('/image/:id',function(req,res){
         var color1 = "#bd8eff;"
         var color2 = "#69e0ff;"
 
-        if(warning == "Invalid" || warning == "Not Normalized"){
+        if(warning == "Invalid" || warning == "No"){
             var color1= "#ff6062"
             var color2= "#ff9766"
             var warninghint = '<text style="fill: rgb(255, 255, 255); font-family: Roboto; font-size: 80px; white-space: pre;text-align:center;width:100%" text-anchor="middle" x="50%" y="30%">⚠</text>';
@@ -101,7 +101,7 @@ app.get('/image/:id',function(req,res){
         //     '  <text style="fill: rgb(255, 255, 255); font-family: Roboto; font-size: '+fsize+'px; letter-spacing:3px;white-space: pre;text-align:center;width:100%" text-anchor="middle" x="50%" y="80%">'+escapeHtml(domainname)+'</text>\n' +
         //     '</svg>'
         // }
-        if(warning == "Normalized"){
+        if(warning == "Yes"){
             var svg = '<?xml version="1.0" encoding="utf-8"?>\n' +
             '<svg viewBox="0 0 500 500" width="500" height="500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">\n' +
             '  <defs>\n' +
@@ -255,6 +255,29 @@ app.get('/:id', async function (req, res) {
                             }
 
 
+                            let upperletters1char = "No"
+                            if(upperletters1(nameString)){
+                                upperletters1char = "Yes"
+                            }
+
+                            let upperletters2char = "No"
+                            if(upperletters2(nameString)){
+                                upperletters2char = "Yes"
+                            }
+
+    
+                            let upperletters3char = "No"
+                            if(upperletters3(nameString)){
+                                upperletters3char = "Yes"
+                            }
+    
+    
+                            let upperletters4char = "No"
+                            if(upperletters4(nameString)){
+                                upperletters4char = "Yes"
+                            }
+
+
                             let arabicdigits1char = "No"
                             if(arabicdigits1(nameString)){
                                 arabicdigits1char = "Yes"
@@ -283,11 +306,11 @@ app.get('/:id', async function (req, res) {
                                 "image": SERVERNAME + "/image/" + tokenId,
                                 "name": nameString,
                                 "external_url": "https://linagee.vision/",
-                                "attributes": [{"trait_type": "Format", "value": "Normalized"},{"trait_type": "Length", "value": nameString.length},{"trait_type": "1 Digit", "value": digits1char},{"trait_type": "2 Digits", "value": digits2char},{"trait_type": "3 Digits", "value": digits3char},{"trait_type": "4 Digits", "value": digits4char},{"trait_type": "5 Digits", "value": digits5char},
-                                    {"trait_type": "1 Letter (lowercase)", "value": lowerletters1char},
-                                    {"trait_type": "2 Letters (lowercase)", "value": lowerletters2char},
-                                    {"trait_type": "3 Letters (lowercase)", "value": lowerletters3char},
-                                    {"trait_type": "4 Letters (lowercase)", "value": lowerletters4char},
+                                "attributes": [{"trait_type": "Normalized", "value": "Yes"},{"trait_type": "Length", "value": nameString.length},{"trait_type": "1 Digit", "value": digits1char},{"trait_type": "2 Digits", "value": digits2char},{"trait_type": "3 Digits", "value": digits3char},{"trait_type": "4 Digits", "value": digits4char},{"trait_type": "5 Digits", "value": digits5char},
+                                {"trait_type": "1 Letter (lowercase)", "value": lowerletters1char},{"trait_type": "1 Letter (uppercase)", "value": upperletters1char},
+                                {"trait_type": "2 Letters (lowercase)", "value": lowerletters2char},{"trait_type": "2 Letters (uppercase)", "value": upperletters2char},
+                                {"trait_type": "3 Letters (lowercase)", "value": lowerletters3char},{"trait_type": "3 Letters (uppercase)", "value": upperletters3char},
+                                {"trait_type": "4 Letters (lowercase)", "value": lowerletters4char},{"trait_type": "4 Letters (uppercase)", "value": upperletters4char},
                                     {"trait_type": "Arabic 1 Digit", "value": arabicdigits1char},{"trait_type": "Arabic 2 Digits", "value": arabicdigits2char},{"trait_type": "Arabic 3 Digits", "value": arabicdigits3char},
                                     {"trait_type": "Emoji only", "value": emojistr},{"trait_type": "Historic", "value": historic}]
 
@@ -302,7 +325,7 @@ app.get('/:id', async function (req, res) {
                                 "image": SERVERNAME + "/image/" + tokenId,
                                 "name": nameString,
                                 "external_url": "https://linagee.vision/",
-                                "attributes": [{"trait_type": "Format", "value": "Not Normalized"},{"trait_type": "Length", "value": nameString.length},{"trait_type": "Historic", "value": historic}]
+                                "attributes": [{"trait_type": "Normalized", "value": "No"},{"trait_type": "Length", "value": nameString.length},{"trait_type": "Historic", "value": historic}]
                             }
 
                         }
@@ -314,7 +337,7 @@ app.get('/:id', async function (req, res) {
                                 "image": SERVERNAME + "/image/" + tokenId,
                                 "name": "INVALID",
                                 "external_url": "https://linagee.vision/",
-                                "attributes": [{"trait_type": "Format", "value": "Invalid"}]
+                                "attributes": [{"trait_type": "Normalized", "value": "Invalid"}]
                             }
                         }
 
@@ -388,9 +411,15 @@ function digits2(str)
 
 //-----DIDNT GET TO LETTERS-----------------------
 
+
 function lowerletters1(str)
 {
     return /^[a-z]{1}$/.test(str);
+}
+
+function upperletters1(str)
+{
+    return /^[A-Z]{1}$/.test(str);
 }
 
 function lowerletters2(str)
@@ -398,15 +427,29 @@ function lowerletters2(str)
     return /^[a-z]{2}$/.test(str);
 }
 
+function upperletters2(str)
+{
+    return /^[A-Z]{2}$/.test(str);
+}
 
 function lowerletters3(str)
 {
     return /^[a-z]{3}$/.test(str);
 }
 
+function upperletters3(str)
+{
+    return /^[A-Z]{3}$/.test(str);
+}
+
 function lowerletters4(str)
 {
     return /^[a-z]{4}$/.test(str);
+}
+
+function upperletters4(str)
+{
+    return /^[A-Z]{4}$/.test(str);
 }
 
 //-----DIDNT GET TO TEST ARABIC DIGITS-------------------
