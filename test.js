@@ -103,6 +103,11 @@ function testTokens(){
 
     const report = []
 
+    var upperone = 0
+    var uppertwo = 0;
+    var upperthree = 0;
+    var upperfour = 0;
+
     const newData = JSON.parse(fs.readFileSync("tokens_3_18_23.json"))
     for(let i=0; i<newData.length; i++){
     console.log(i)
@@ -119,6 +124,22 @@ function testTokens(){
         var alert1 = "";
         var alert2 = "";
 
+        if(earlyData.attributes[2] && earlyData.attributes[2].value &&  earlyData.attributes[2].value == "Yes"){
+            upperone += 1;
+        }
+
+        if(earlyData.attributes[3] && earlyData.attributes[3].value &&  earlyData.attributes[3].value == "Yes"){
+            uppertwo += 1;
+        }
+
+        if(earlyData.attributes[4] && earlyData.attributes[4].value &&  earlyData.attributes[4].value == "Yes"){
+            upperthree += 1;
+        }
+
+        if(earlyData.attributes[5] && earlyData.attributes[5].value &&  earlyData.attributes[5].value == "Yes"){
+            upperfour += 1;
+        }
+
         if(earlyStatus == "Yes"){
             var boolStatus = true
         }
@@ -131,27 +152,4 @@ function testTokens(){
             var alert1 = "bytesError"
         }
 
-        if(newStatus !== boolStatus){
-            var alert2 = " statusError"
-        }
-
-        var alert = alert1+alert2
-
-
-        if(alert.length > 1){
-            report.push({tokenId: newId, bytes: newBytes, status: newStatus, alert: alert})
-        }
-        
-
-    }
-    else{
-        report.push({tokenId: newId, bytes: newBytes, status: newStatus, alert: "missing" })
-    }
-
-    }
-
-    fs.writeFileSync("report_3_30_23p2.json", JSON.stringify(report));
-
-}
-
-testTokens()
+   

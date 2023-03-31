@@ -205,6 +205,33 @@ app.get('/:id', async function (req, res) {
                             historic = isHistoric(nameString)
                         }
 
+                        console.log("upper", upperletters1(nameString), isValid, onlyLatinCharacters(nameString))
+
+                        let upperletters1char = "No"
+                        if(upperletters1(nameString) && isValid && onlyLatinCharacters(nameString)){
+                            
+                            upperletters1char = "Yes"
+                        }
+
+                        let upperletters2char = "No"
+                        if(upperletters2(nameString) && isValid && onlyLatinCharacters(nameString)){
+                            upperletters2char = "Yes"
+                        }
+
+
+                        let upperletters3char = "No"
+                        if(upperletters3(nameString) && isValid && onlyLatinCharacters(nameString)){
+                            upperletters3char = "Yes"
+                        }
+
+
+                        let upperletters4char = "No"
+                        if(upperletters4(nameString) && isValid && onlyLatinCharacters(nameString)){
+
+                            upperletters4char = "Yes"
+                        }
+
+
                         var retJson
                         if(isValid && isNormalized){
                                 
@@ -325,7 +352,12 @@ app.get('/:id', async function (req, res) {
                                 "image": SERVERNAME + "/image/" + tokenId,
                                 "name": nameString,
                                 "external_url": "https://linagee.vision/",
-                                "attributes": [{"trait_type": "Normalized", "value": "No"},{"trait_type": "Length", "value": nameString.length},{"trait_type": "Historic", "value": historic}]
+                                "attributes": [{"trait_type": "Normalized", "value": "No"},{"trait_type": "Length", "value": nameString.length},
+                                {"trait_type": "1 Letter (uppercase)", "value": upperletters1char},
+                                {"trait_type": "2 Letters (uppercase)", "value": upperletters2char},
+                                {"trait_type": "3 Letters (uppercase)", "value": upperletters3char},
+                                {"trait_type": "4 Letters (uppercase)", "value": upperletters4char},
+                                {"trait_type": "Historic", "value": historic}]
                             }
 
                         }
@@ -380,6 +412,10 @@ app.get('/:id', async function (req, res) {
 app.listen(process.env.PORT || 8080, function () {
     console.log('Listening on port 8080!');
 });
+
+function onlyLatinCharacters(str) {
+    return /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/.test(str);
+}
 
 
 function digits3(str)
