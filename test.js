@@ -152,4 +152,29 @@ function testTokens(){
             var alert1 = "bytesError"
         }
 
-   
+        if(newStatus !== boolStatus){
+            var alert2 = " statusError"
+        }
+
+        var alert = alert1+alert2
+
+
+        if(alert.length > 1){
+            report.push({tokenId: newId, bytes: newBytes, status: newStatus, alert: alert})
+        }
+        
+
+    }
+    else{
+        report.push({tokenId: newId, bytes: newBytes, status: newStatus, alert: "missing" })
+    }
+
+    }
+
+    //fs.writeFileSync("report_3_31_23.json", JSON.stringify(report));
+
+    console.log("upper count ", upperone, uppertwo, upperthree, upperfour)
+
+}
+
+testTokens()
