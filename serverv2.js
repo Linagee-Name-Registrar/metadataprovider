@@ -179,7 +179,7 @@ app.get('/:id', async function (req, res) {
 
 
     try{
-        const contract = await connectToContract();
+        
 
         if (fs.existsSync("data/"+tokenId+".json") && !ignoreCache) {
 
@@ -191,6 +191,7 @@ app.get('/:id', async function (req, res) {
             res.send(data);
         }
         else {
+            const contract = await connectToContract();
 
                 var result = await contract.idToName(tokenId)
                 console.log("result is", result)
